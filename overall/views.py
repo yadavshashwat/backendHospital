@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect,HttpResponseForbidden,HttpResponse
+from django.core.paginator import Paginator
+
 from overall.models import *
 
 # import boto3
@@ -8,7 +10,7 @@ import re
 import random
 import string
 from datetime import datetime
-
+import math
 
 # Create your views here.
 
@@ -51,6 +53,23 @@ def set_cookie(response, key, value, days_expire = 7):
 
 def random_str_generator(size=6, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for x in range(size))
+
+# Pagination Setup
+
+def pagination(object,request):
+        page_num = request.GET.get('page_num', "1")
+        page_size = request.GET.get('page_size', "10")
+        num_pages = 1
+        total_records = object.count()
+        if page_num != None and page_num != "":
+            page_num = int(page_num)
+            object = Paginator(object, int(page_size))
+            try:
+                object = object.page(page_num)
+            except:
+                object = object
+            num_pages = int(math.ceil(total_records / float(int(page_size))))
+        return({'object':object,'num_pages':num_pages,'total_records':total_records})
 
 
 # def upload_image(request):

@@ -5,7 +5,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from django.core.paginator import Paginator
 
-import math
+# import math
 
 from usermgmt.serializers import *
 from overall.views import *
@@ -22,27 +22,19 @@ def hospital_list(request):
             hospitals = hospitals.filter(name__icontains=name)
         
         # Setting up pagination
-        num_pages = 1
-        total_records = hospitals.count()
-        page_num = request.GET.get('page_num', "1")
-        page_size = request.GET.get('page_size', "10")
-        if page_num != None and page_num != "":
-            page_num = int(page_num)
-            hospitals = Paginator(hospitals, int(page_size))
-            try:
-                hospitals = hospitals.page(page_num)
-            except:
-                hospitals = hospitals
-            num_pages = int(math.ceil(total_records / float(int(page_size))))
-
-        hospital_serializer = HospitalSerializer(hospitals, many=True)
-        output = hospital_serializer.data
+        pagination_out = pagination(object=hospitals,request=request)
+        hospital_serializer = HospitalSerializer(pagination_out['object'], many=True)
+        
+        num_pages = pagination_out['num_pages']
+        total_records = pagination_out['total_records']
+        data = hospital_serializer.data
         filters = {}
         success = True
         message = "Found Hospital Records"
+
         return JsonResponse(
             {
-                'data':output,
+                'data':data,
                 'success':success,
                 'filters':filters,
                 'num_pages':num_pages,
