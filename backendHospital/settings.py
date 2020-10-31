@@ -60,6 +60,12 @@ CORS_ORIGIN_ALLOW_ALL = True
 #     'http://localhost:8081',
 # )
 
+
+# REST_FRAMEWORK = {
+#     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+#     'PAGE_SIZE': 100
+# }
+
 ROOT_URLCONF = 'backendHospital.urls'
 
 TEMPLATES = [
