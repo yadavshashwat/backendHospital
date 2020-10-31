@@ -31,9 +31,7 @@ def hospital_list(request):
         filters = {}
         success = True
         message = "Found Hospital Records"
-
-        return JsonResponse(
-            {
+        obj =             {
                 'data':data,
                 'success':success,
                 'filters':filters,
@@ -41,7 +39,8 @@ def hospital_list(request):
                 'total_records':total_records,
                 'message':message
             }
-            , safe=False)
+
+        return JsonResponse(obj, safe=False)
  
     elif request.method == 'POST':
         hospital_data = JSONParser().parse(request)
@@ -59,28 +58,34 @@ def hospital_list(request):
             hospital_serializer.save()
             success = True
             message = "Hospital Created!"
-            return JsonResponse({
-                'data':hospital_serializer.data,
+            data = hospital_serializer.data
+            obj= {
+                'data': data,
                 'success':True,
                 'message':message
-            }, status=status.HTTP_201_CREATED) 
+            }
+            return JsonResponse(obj, status=status.HTTP_201_CREATED) 
         
         else:
             success = False
             message = "Invalid Serializer!"
-            return JsonResponse({
-                'errors':hospital_serializer.errors,
+            errors = hospital_serializer.errors
+            obj = {
+                'errors': errors,
                 'success':success,
-                message: message
+                'message': message
             }
-            , status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse(obj, status=status.HTTP_400_BAD_REQUEST)
     
     elif request.method == 'DELETE':
         count = Hospital.objects.all().delete()
-        return JsonResponse({
+        success = True
+        message = '{} Hospitals were deleted successfully!'.format(count[0])
+        obj= {
             'success':True,
-            'message': '{} Hospitals were deleted successfully!'.format(count[0])
-            }, status=status.HTTP_204_NO_CONTENT)
+            'message': message
+            }
+        return JsonResponse(obj, status=status.HTTP_204_NO_CONTENT)
  
  
 @api_view(['GET', 'PUT', 'DELETE'])
@@ -88,23 +93,61 @@ def hospital_detail(request, id):
     try: 
         hospital = Hospital.objects.get(id=id) 
     except Hospital.DoesNotExist: 
-        return JsonResponse({'message': 'The hospital does not exist'}, status=status.HTTP_404_NOT_FOUND) 
+        message = 'The hospital does not exist'
+        success = False
+        obj = {
+                'message': message,
+                'success': success
+              }
+        return JsonResponse(obj, status=status.HTTP_404_NOT_FOUND) 
  
     if request.method == 'GET': 
         hospital_serializer = HospitalSerializer(hospital) 
-        return JsonResponse(hospital_serializer.data) 
+        message = "Hospital Found!"
+        success = True
+        data = hospital_serializer.data
+        obj ={
+                'data':data,
+                'success':success,
+                'message':message
+            }
+        return JsonResponse(obj) 
  
     elif request.method == 'PUT': 
         hospital_data = JSONParser().parse(request) 
         hospital_serializer = HospitalSerializer(hospital, data=hospital_data) 
         if hospital_serializer.is_valid(): 
             hospital_serializer.save() 
-            return JsonResponse(hospital_serializer.data) 
-        return JsonResponse(hospital_serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
+            success = True
+            data = hospital_serializer.data
+            message = "Hospital Updated!"
+            obj ={
+                'data':data,
+                'success':success,
+                'message':message
+            }
+            return JsonResponse(obj) 
+        else:
+            success = False
+            errors = hospital_serializer.errors
+            message = "Unable to update hospital"
+            obj = {
+                'success':False,
+                'errors': errors,
+                'message':message
+            }
+        return JsonResponse(obj, status=status.HTTP_400_BAD_REQUEST) 
  
     elif request.method == 'DELETE': 
         hospital.delete() 
-        return JsonResponse({'message': 'Hospital was deleted successfully!'}, status=status.HTTP_204_NO_CONTENT)
+        success = True
+        message = 'Hospital was deleted successfully!'
+        obj= {
+            'success':True,
+            'message': message
+            }
+
+        return JsonResponse(obj, status=status.HTTP_204_NO_CONTENT)
     
         
     
