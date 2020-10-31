@@ -8,6 +8,11 @@ user_type = ['doctor','nurse','other']
 
 class Hospital(BaseModel):
     name = models.CharField(max_length=50)
+    address = models.CharField(max_length=50)
+    city = models.CharField(max_length=50)
+    state = models.CharField(max_length=50)
+    pincode = models.IntegerField()
+    is_opd_active = models.BooleanField(default=True)
     def __str__(self):
         return json.dumps({'id':self.id,'name':self.name})
 
@@ -21,7 +26,7 @@ class HospitalUser(BaseModel):
     secret_string = models.CharField(max_length=20, null=True)
     auth_token    = models.CharField(max_length=20, null=True)
     is_super_user = models.BooleanField(default=False)
-    user_type = models.CharField(max_lenght=20)
+    user_type = models.CharField(max_length=20)
     active = models.BooleanField(default=True)  
     # define user access list
     has_opd_mgmt = models.BooleanField(default=False)
@@ -30,7 +35,6 @@ class HospitalUser(BaseModel):
     
 class PatientUser(BaseModel):
     name = models.CharField(max_length=50)
-    uin_number = models.CharField(max_length=50)
     phone_number = models.IntegerField()
     address = models.CharField(max_length=50)
     city = models.CharField(max_length=50)
@@ -38,6 +42,8 @@ class PatientUser(BaseModel):
     dob = models.DateField()
     attendant_name = models.CharField(max_length=50)
     attendant_number = models.IntegerField()
+    def __str__(self):
+        return json.dumps({'id':self.id,'name':self.name})
 
 
 

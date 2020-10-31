@@ -15,7 +15,20 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf.urls import url, include 
+from usermgmt.views import *
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    # url(r'crud_exchange/', views.crud_exchange, name='crud_exchange'),
+    url(r'^api/hospitals$', hospital_list),
+    url(r'^api/hospitals/(?P<id>[0-9]+)$', hospital_detail),
+
+    # url(r'^', include('usermgmt.urls')),
+
 ]
+
+
+
+ 
