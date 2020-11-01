@@ -22,8 +22,9 @@ from usermgmt.views import *
 urlpatterns = [
     path('admin/', admin.site.urls),
     # url(r'crud_exchange/', views.crud_exchange, name='crud_exchange'),
-    url(r'^api/hospitals$', hospital_list),
-    url(r'^api/hospitals/(?P<id>[0-9]+)$', hospital_detail),
+    # version 1 apis
+    url(r'^api/v1/hospitals$', hospitalMgmt.object_list_v1),
+    url(r'^api/v1/hospitals/(?P<id>[0-9]+)$', hospitalMgmt.object_detail_v1),
 
     # url(r'^', include('usermgmt.urls')),
 
