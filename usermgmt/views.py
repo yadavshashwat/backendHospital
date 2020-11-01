@@ -85,7 +85,7 @@ class hospitalMgmt:
         elif request.method == 'DELETE':
             count = dataObject.objects.all().delete()
             success = True
-            message = '{} '+ dataObjectFriendlyName  + ' were deleted successfully!'.format(count[0])
+            message = ('{} '+ dataObjectFriendlyName  + ' were deleted successfully!').format(count[0])
             obj= {
                 'success':True,
                 'message': message
