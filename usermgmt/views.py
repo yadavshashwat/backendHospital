@@ -3,7 +3,6 @@ from django.http.response import JsonResponse
 from rest_framework.parsers import JSONParser 
 from rest_framework import status
 from rest_framework.decorators import api_view
-from django.core.paginator import Paginator
 
 from usermgmt.serializers import *
 from overall.views import *
@@ -11,12 +10,14 @@ from overall.views import *
 class hospitalMgmt:
     @api_view(['GET', 'POST', 'DELETE'])
     def object_list_v1(request):
+
         # to update - start
         dataObject = Hospital
         dataObjectFriendlyName = "Hospital"
         dataObjectFilterList = {}
         dataObjectSerializer = HospitalSerializer    
         # to update - end
+
         if request.method == 'GET':
             objects = dataObject.objects.all()
 
@@ -33,16 +34,15 @@ class hospitalMgmt:
             total_records = pagination_out['total_records']
             data = object_serializer.data
             filters = dataObjectFilterList
-
             success = True
             message = "Found "+ dataObjectFriendlyName +" Records"
             obj =             {
-                    'data':data,
                     'success':success,
                     'filters':filters,
                     'num_pages':num_pages,
                     'total_records':total_records,
-                    'message':message
+                    'message':message,
+                    'data':data
                 }
 
             return JsonResponse(obj, safe=False)
@@ -65,9 +65,9 @@ class hospitalMgmt:
                 message = dataObjectFriendlyName + " Created!"
                 data = object_serializer.data
                 obj= {
-                    'data': data,
                     'success':True,
-                    'message':message
+                    'message':message,
+                    'data': data
                 }
                 return JsonResponse(obj, status=status.HTTP_201_CREATED) 
             
@@ -76,9 +76,9 @@ class hospitalMgmt:
                 message = "Invalid Serializer!"
                 errors = object_serializer.errors
                 obj = {
-                    'errors': errors,
                     'success':success,
-                    'message': message
+                    'message': message,
+                    'errors': errors
                 }
                 return JsonResponse(obj, status=status.HTTP_400_BAD_REQUEST)
         
@@ -94,6 +94,7 @@ class hospitalMgmt:
 
     @api_view(['GET', 'PUT', 'DELETE'])
     def object_detail_v1(request, id):
+
         # to update - start
         dataObject = Hospital
         dataObjectFriendlyName = "Hospital"
@@ -117,9 +118,9 @@ class hospitalMgmt:
             success = True
             data = object_serializer.data
             obj ={
-                    'data':data,
                     'success':success,
-                    'message':message
+                    'message':message,
+                    'data':data
                 }
             return JsonResponse(obj) 
     
@@ -132,9 +133,9 @@ class hospitalMgmt:
                 data = object_serializer.data
                 message = dataObjectFriendlyName + " Updated!"
                 obj ={
-                    'data':data,
                     'success':success,
-                    'message':message
+                    'message':message,
+                    'data':data
                 }
                 return JsonResponse(obj) 
             else:
@@ -143,8 +144,8 @@ class hospitalMgmt:
                 message = "Unable to update " + dataObjectFriendlyName
                 obj = {
                     'success':False,
-                    'errors': errors,
-                    'message':message
+                    'message':message,
+                    'errors': errors
                 }
             return JsonResponse(obj, status=status.HTTP_400_BAD_REQUEST) 
     
