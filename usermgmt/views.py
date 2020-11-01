@@ -94,7 +94,7 @@ class hospitalMgmt:
 
     @api_view(['GET', 'PUT', 'DELETE'])
     def object_detail_v1(request, id):
-
+        
         # to update - start
         dataObject = Hospital
         dataObjectFriendlyName = "Hospital"
