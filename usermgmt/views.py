@@ -21,11 +21,13 @@ class hospitalMgmt:
         if request.method == 'GET':
             objects = dataObject.objects.all()
 
-            # setting up filters
+            # to update filters - start
             name = request.GET.get('name', None)
             if name is not None:
                 objects = objects.filter(name__icontains=name)
             
+            # to update filters - end
+
             # Setting up pagination
             pagination_out = pagination(object=objects,request=request)
             object_serializer = dataObjectSerializer(pagination_out['object'], many=True)
@@ -49,6 +51,8 @@ class hospitalMgmt:
     
         elif request.method == 'POST':
             object_data = JSONParser().parse(request)
+            # to update - case change - start
+            
             try:
                 object_data['name'] = cleanstring(object_data['name'].lower())
                 object_data['address'] = cleanstring(object_data['address'].lower())
@@ -57,6 +61,7 @@ class hospitalMgmt:
             except:
                 None
 
+            # to update - case change - end
             object_serializer = dataObjectSerializer(data=object_data)
             
             if object_serializer.is_valid():
