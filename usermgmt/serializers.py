@@ -11,6 +11,8 @@ class HospitalSerializer(serializers.ModelSerializer):
                   'city',
                   'state',
                   'pincode',
-                  'is_opd_active'
+                  'is_opd_active',
+                  'sms_balance',
+                  'email_balance'
                   )
 

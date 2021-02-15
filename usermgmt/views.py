@@ -161,4 +161,3 @@ class hospitalMgmt:
             return JsonResponse(obj, status=status.HTTP_204_NO_CONTENT)
         
             
-    
