@@ -38,21 +38,20 @@ class hospitalMgmt:
             filters = dataObjectFilterList
             success = True
             message = "Found "+ dataObjectFriendlyName +" Records"
-            obj =             {
+            obj = {
                     'success':success,
                     'filters':filters,
                     'num_pages':num_pages,
                     'total_records':total_records,
                     'message':message,
                     'data':data
-                }
+                    }
 
             return JsonResponse(obj, safe=False)
     
         elif request.method == 'POST':
             object_data = JSONParser().parse(request)
             # to update - case change - start
-            
             try:
                 object_data['name'] = cleanstring(object_data['name'].lower())
                 object_data['address'] = cleanstring(object_data['address'].lower())
@@ -60,7 +59,7 @@ class hospitalMgmt:
                 object_data['state'] = cleanstring(object_data['state'].lower())
             except:
                 None
-
+                
             # to update - case change - end
             object_serializer = dataObjectSerializer(data=object_data)
             
